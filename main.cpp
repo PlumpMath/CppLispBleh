@@ -18,6 +18,9 @@ int main() {
     AST *ast = objToAst(o);
     cout << ast->toString() << endl;
 
+    llvm::Value *v = ast->emitIR();
+    v->dump();
+
     // string in = "";
     // while(true) {
     //     getline(cin, in);
@@ -26,3 +29,5 @@ int main() {
     //     cout << read(p, in).toString() << endl;
     // }
 }
+
+// clang++ main.cpp read.cpp ast.cpp obj.cpp -o Bleh `llvm-config --cxxflags --ldflags --system-libs --libs core`

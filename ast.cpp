@@ -4,8 +4,9 @@
 
 using namespace llvm;
 
-static LLVMContext TheContext;
-static IRBuilder<> Builder(TheContext);
+static LLVMContext theContext;
+static IRBuilder<> builder(theContext);
+static unique_ptr<Module> theModule;
 
 AST *objToAst(Obj& obj) {
     if(obj.tag == List) {
@@ -34,7 +35,9 @@ AST_Binop::AST_Binop(Op op, AST *lhs, AST *rhs) {
 }
 
 Value *AST_Binop::emitIR() {
-    return nullptr;
+    Value *l = lhs->emitIR();
+    Value *r = rhs->emitIR();
+    return builder.CreateFAdd(l, r, "addtmp");
 }
 
 string AST_Binop::toString() {
@@ -66,7 +69,7 @@ AST_Number::AST_Number(double number) {
 }
 
 Value *AST_Number::emitIR() {
-    return ConstantFP::get(TheContext, APFloat(number));
+    return ConstantFP::get(theContext, APFloat(number));
 }
 
 string AST_Number::toString() {
