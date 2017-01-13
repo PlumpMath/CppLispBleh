@@ -16,12 +16,10 @@
 
 #include "obj.h"
 
-using namespace llvm;
-
 class AST {
   public:
     virtual ~AST() {}
-    virtual Value *emitIR() = 0;
+    virtual llvm::Value *emitIR() = 0;
     virtual string toString() = 0;
 };
 
@@ -39,7 +37,7 @@ class AST_Binop : public AST {
     Op op;
     AST *lhs;
     AST *rhs;
-    Value *emitIR();
+    llvm::Value *emitIR();
     string toString();
 };
 
@@ -48,7 +46,7 @@ class AST_Call : public AST {
     AST_Call(string& functionName);
     virtual ~AST_Call() {}
     string functionName;
-    Value *emitIR();
+    llvm::Value *emitIR();
     string toString();
 };
 
@@ -57,7 +55,7 @@ class AST_Number : public AST {
     AST_Number(double number);
     virtual ~AST_Number() {}
     double number;
-    Value *emitIR();
+    llvm::Value *emitIR();
     string toString();
 };
 

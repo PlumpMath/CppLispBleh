@@ -2,6 +2,8 @@
 
 #include <sstream>
 
+using namespace llvm;
+
 static LLVMContext TheContext;
 static IRBuilder<> Builder(TheContext);
 
@@ -32,7 +34,7 @@ AST_Binop::AST_Binop(Op op, AST *lhs, AST *rhs) {
 }
 
 Value *AST_Binop::emitIR() {
-    
+    return nullptr;
 }
 
 string AST_Binop::toString() {
@@ -51,7 +53,7 @@ AST_Call::AST_Call(string& functionName) {
 }
 
 Value *AST_Call::emitIR() {
-    
+    return nullptr;
 }
 
 string AST_Call::toString() {
@@ -64,7 +66,7 @@ AST_Number::AST_Number(double number) {
 }
 
 Value *AST_Number::emitIR() {
-    ConstantFP::get(LLVMContext, APFloat(number));
+    return ConstantFP::get(TheContext, APFloat(number));
 }
 
 string AST_Number::toString() {

@@ -18,11 +18,11 @@ int main() {
     AST *ast = objToAst(o);
     cout << ast->toString() << endl;
 
-    string in = "";
-    while(true) {
-        getline(cin, in);
-        if(in == "exit") break;
-        unsigned long p = 0;
-        cout << read(p, in).toString() << endl;
-    }
+    // string in = "";
+    // while(true) {
+    //     getline(cin, in);
+    //     if(in == "exit") break;
+    //     unsigned long p = 0;
+    //     cout << read(p, in).toString() << endl;
+    // }
 }
