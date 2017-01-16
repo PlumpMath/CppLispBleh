@@ -19,7 +19,7 @@
 class AST {
   public:
     virtual ~AST() {}
-    virtual llvm::Value *emitIR(llvm::LLVMContext& context, llvm::IRBuilder<>& builder) = 0;
+    virtual llvm::Value *emitIR(llvm::Module& module, llvm::LLVMContext& context, llvm::IRBuilder<>& builder) = 0;
     virtual string toString() = 0;
 };
 
@@ -37,7 +37,7 @@ class AST_Binop : public AST {
     Op op;
     AST *lhs;
     AST *rhs;
-    llvm::Value *emitIR(llvm::LLVMContext& context, llvm::IRBuilder<>& builder);
+    llvm::Value *emitIR(llvm::Module& module, llvm::LLVMContext& context, llvm::IRBuilder<>& builder);
     string toString();
 };
 
@@ -46,7 +46,7 @@ class AST_Call : public AST {
     AST_Call(string& functionName);
     virtual ~AST_Call() {}
     string functionName;
-    llvm::Value *emitIR(llvm::LLVMContext& context, llvm::IRBuilder<>& builder);
+    llvm::Value *emitIR(llvm::Module& module, llvm::LLVMContext& context, llvm::IRBuilder<>& builder);
     string toString();
 };
 
@@ -55,7 +55,17 @@ class AST_Number : public AST {
     AST_Number(double number);
     virtual ~AST_Number() {}
     double number;
-    llvm::Value *emitIR(llvm::LLVMContext& context, llvm::IRBuilder<>& builder);
+    llvm::Value *emitIR(llvm::Module& module, llvm::LLVMContext& context, llvm::IRBuilder<>& builder);
+    string toString();
+};
+
+class AST_Defn : public AST {
+  public:
+    AST_Defn(string& functionName, AST *body);
+    virtual ~AST_Defn() {}
+    string functionName;
+    AST *body;
+    llvm::Value *emitIR(llvm::Module& module, llvm::LLVMContext& context, llvm::IRBuilder<>& builder);
     string toString();
 };
 

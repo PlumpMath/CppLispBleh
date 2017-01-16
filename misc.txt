@@ -1,0 +1,41 @@
+// // Save as executable
+    // auto TargetTriple = sys::getDefaultTargetTriple();
+    // InitializeAllTargetInfos();
+    // InitializeAllTargets();
+    // InitializeAllTargetMCs();
+    // InitializeAllAsmParsers();
+    // InitializeAllAsmPrinters();
+    // std::string Error;
+    // auto target = TargetRegistry::lookupTarget(TargetTriple, Error);
+    // if (!target) {
+    //     errs() << Error;
+    //     return 1;
+    // }
+    // cout << "Target: " << target << endl;
+    // auto CPU = "generic";
+    // auto Features = "";
+    // TargetOptions opt;
+    // auto RM = Optional<Reloc::Model>();
+    // auto TargetMachine = target->createTargetMachine(TargetTriple, CPU, Features, opt, RM);
+    // mainModule.setDataLayout(TargetMachine->createDataLayout());
+    // mainModule.setTargetTriple(TargetTriple);
+    
+    // auto Filename = "prog";
+    // std::error_code EC;
+    // raw_fd_ostream dest(Filename, EC, sys::fs::F_None);
+    // if (EC) {
+    //     errs() << "Could not open file: " << EC.message();
+    //     return 1;
+    // }
+    
+    // legacy::PassManager pass;
+    // auto FileType = TargetMachine::CGFT_ObjectFile;
+    // //auto FileType = TargetMachine::CGFT_AssemblyFile;
+    
+    // if (TargetMachine->addPassesToEmitFile(pass, dest, FileType)) {
+    //     errs() << "TargetMachine can't emit a file of this type";
+    //     return 1;
+    // }
+    
+    // pass.run(mainModule);    
+    // dest.flush();
