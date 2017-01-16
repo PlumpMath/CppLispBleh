@@ -3,3 +3,5 @@
 /Bleh
 *.o
 TAGS
+/a.out
+/module.bc
