@@ -4,10 +4,6 @@
 
 using namespace llvm;
 
-static LLVMContext theContext;
-static IRBuilder<> builder(theContext);
-static unique_ptr<Module> theModule;
-
 AST *objToAst(Obj& obj) {
     if(obj.tag == List) {
         if(obj.list.size() == 3 &&
@@ -27,6 +23,20 @@ AST *objToAst(Obj& obj) {
     return nullptr;
 }
 
+Value *buildMainFunction(llvm::Module& module, llvm::LLVMContext& context, llvm::IRBuilder<>& builder) {
+    vector<Type*> args = {};
+    FunctionType *ft = FunctionType::get(Type::getInt32Ty(context), args, false);
+    Function *f = Function::Create(ft, Function::ExternalLinkage, "main", &module);
+
+    BasicBlock *bb = BasicBlock::Create(context, "entry", f);
+    builder.SetInsertPoint(bb);
+
+    auto zero = ConstantInt::get(Type::getInt32Ty(context), 123, false);
+    builder.CreateRet(zero);
+
+    return f;
+}
+
 // AST_Binop
 AST_Binop::AST_Binop(Op op, AST *lhs, AST *rhs) {
     this->op = op;
@@ -34,9 +44,9 @@ AST_Binop::AST_Binop(Op op, AST *lhs, AST *rhs) {
     this->rhs = rhs;
 }
 
-Value *AST_Binop::emitIR() {
-    Value *l = lhs->emitIR();
-    Value *r = rhs->emitIR();
+Value *AST_Binop::emitIR(llvm::LLVMContext& context, llvm::IRBuilder<>& builder) {
+    Value *l = lhs->emitIR(context, builder);
+    Value *r = rhs->emitIR(context, builder);
     return builder.CreateFAdd(l, r, "addtmp");
 }
 
@@ -55,7 +65,7 @@ AST_Call::AST_Call(string& functionName) {
     this->functionName = functionName;
 }
 
-Value *AST_Call::emitIR() {
+Value *AST_Call::emitIR(llvm::LLVMContext& context, llvm::IRBuilder<>& builder) {
     return nullptr;
 }
 
@@ -68,8 +78,8 @@ AST_Number::AST_Number(double number) {
     this->number = number;
 }
 
-Value *AST_Number::emitIR() {
-    return ConstantFP::get(theContext, APFloat(number));
+Value *AST_Number::emitIR(llvm::LLVMContext& context, llvm::IRBuilder<>& builder) {
+    return ConstantFP::get(context, APFloat(number));
 }
 
 string AST_Number::toString() {
